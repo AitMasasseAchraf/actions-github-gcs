@@ -47,7 +47,7 @@ jobs:
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: actions-github-gcs2001
+          project_id: github-actions-gcs2001
 
       - name: Filter and Deploy Files
         run: |
@@ -58,7 +58,7 @@ jobs:
           rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
 
           # Use gsutil to deploy the filtered files to the GCS bucket
-          gsutil -m cp -r filtered_files/* gs://actions-github-gcs2001/
+          gsutil -m cp -r filtered_files/* gs://github-actions-gcs2001/
 
           # Clean up the temporary directory
           rm -r filtered_files
