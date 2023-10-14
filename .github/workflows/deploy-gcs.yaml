@@ -47,11 +47,11 @@ jobs:
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: github-actions-gcs
+          project_id: github-actions-gcs2001
 
       - name: Filter and Deploy Files
         run: |
-#           Create a temporary directory for the files you want to deploy
+
           mkdir -p filtered_files
 
           # Use rsync to copy the files from the specified path to the temporary directory
