@@ -58,7 +58,7 @@ jobs:
           rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
 
           # Use gsutil to deploy the filtered files to the GCS bucket
-          gsutil -m cp -r filtered_files/* gs://github-action-gcs/
+          gsutil -m cp -r filtered_files/* gs://github-action-gcs2001/
 
           # Clean up the temporary directory
           rm -r filtered_files
