@@ -1,31 +1,64 @@
-name: GCS Deployment
+# name: GCS Deployment
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
+# on:
+#   push:
+#     branches: [ main ]
+
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#   # This workflow contains a single job called "deploy"
+#   deploy:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#     - uses: actions/checkout@v2
+
+#     # Setup gcloud CLI
+#     - uses: google-github-actions/setup-gcloud@v0
+#       with:
+#         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+#         service_account_key: ${{ secrets.GCP_SA_KEY }}
+#         project_id: github-actions-gcs2001
+
+#     - name: Deploy via GCS
+#       run: |
+#         gsutil -m rm -rf gs://github-actions-gcs2001/* || echo "$?"
+#         gsutil -m cp -r * gs://github-actions-gcs2001/
+
+name: GCS Deployment
+
 on:
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "deploy"
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@v0
-      with:
-        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: github-actions-gcs2001
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: github-actions-gcs
 
-    - name: Deploy via GCS
-      run: |
-        gsutil -m rm -rf gs://github-actions-gcs2001/* || echo "$?"
-        gsutil -m cp -r * gs://github-actions-gcs2001/
+      - name: Filter and Deploy Files
+        run: |
+#           Create a temporary directory for the files you want to deploy
+          mkdir -p filtered_files
+
+          # Use rsync to copy the files from the specified path to the temporary directory
+          rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
+
+          # Use gsutil to deploy the filtered files to the GCS bucket
+          gsutil -m cp -r filtered_files/* gs://github-action-gcs/
+
+          # Clean up the temporary directory
+          rm -r filtered_files
