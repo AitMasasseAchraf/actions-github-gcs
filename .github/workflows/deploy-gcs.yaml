@@ -90,7 +90,7 @@ jobs:
       with:
         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: github-actions-gcs
+        project_id: github-actions-gcs2001
 
 
     - name: Check if GCS Bucket is Not Empty
@@ -143,7 +143,7 @@ jobs:
         gsutil ls "gs://$BUCKET_NAME" > gcs_files.txt
 
         # Compare files in the local folder with those in the GCS folder
-        for file in "${{ github.workspace }}/lab/dwh"; do
+        for file in "${{ github.workspace }}/lab"; do
           base_file=$(basename "$file")
           if ! grep -q "$base_file" gcs_files.txt; then
             cp "$file" "$temp_dir"
