@@ -142,7 +142,7 @@ jobs:
         gsutil ls "gs://$BUCKET_NAME" > gcs_files.txt
 
         # Compare files in the local folder with those in the GCS folder
-        for file in "${{ github.workspace }}/lab/dwh/*"; do
+        for file in "${{ github.workspace }}/lab/dwh"/*; do
           base_file=$(basename "$file")
           if ! grep -q "$base_file" gcs_files.txt; then
             cp "$file" "$temp_dir"
