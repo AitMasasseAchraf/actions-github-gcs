@@ -90,7 +90,7 @@ jobs:
       with:
         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: github-actions-gcs2001
+        project_id: github-actions-gcs
 
 
     - name: Check if GCS Bucket is Not Empty
