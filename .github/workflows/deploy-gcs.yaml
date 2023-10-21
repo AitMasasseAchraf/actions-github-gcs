@@ -54,6 +54,7 @@
 # #           Create a temporary directory for the files you want to deploy
 #           mkdir -p filtered_files
 
+
 #           # Use rsync to copy the files from the specified path to the temporary directory
 #           rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
 
