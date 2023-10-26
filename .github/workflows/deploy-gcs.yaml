@@ -99,8 +99,8 @@ jobs:
     - name: List GCS bucket files
       id: list_bucket_files
       run: |
-        gsutil ls -r gs://github-action-gcs2001/
-        echo "::set-output name=bucket_files::$(gsutil ls -r gs://github-action-gcs2001/)"
+        gsutil ls -r gs://github-actions-gcs2001/
+        echo "::set-output name=bucket_files::$(gsutil ls -r gs://github-actions-gcs2001/)"
         
     - name: Compare and copy new files to GCS
       run: |
@@ -109,6 +109,6 @@ jobs:
         
         for file in "${local_files[@]}"; do
           if [[ ! " ${bucket_files[@]} " =~ " $file " ]]; then
-            gsutil cp "$file" gs://github-action-gcs2001/
+            gsutil cp "$file" gs://github-actions-gcs2001/
           fi
         done
