@@ -54,6 +54,10 @@
 # #           Create a temporary directory for the files you want to deploy
 #           mkdir -p filtered_files
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
 #           # Use rsync to copy the files from the specified path to the temporary directory
 #           rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
 
@@ -80,6 +84,8 @@ on:
 jobs:
   detect-duplicates:
     runs-on: ubuntu-latest
+    env:
+      BUCKET_NAME: "github-actions-gcs2001"
 
     steps:
     - name: Set up Google Cloud SDK
@@ -89,6 +95,7 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         project_id: github-actions-gcs2001
 
+<<<<<<< HEAD
     - name: Check if GCS Bucket is Not Empty
       id: check-empty-bucket
       run: |
@@ -125,6 +132,24 @@ jobs:
 
 
 
+=======
+
+    - name: Check if GCS Bucket is Not Empty
+      id: check-empty-bucket
+      run: |
+        if gsutil -q stat gs://$BUCKET_NAME/*
+        then
+          echo "GCS bucket is not empty."
+          echo "::set-output name=GCSBucketNotEmpty::true"
+        else
+          echo "GCS bucket is empty."
+          echo "::set-output name=GCSBucketNotEmpty::false"
+        fi
+      shell: bash
+
+
+
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
     # - name:
     #   run: |
     #     temp_dir1=$(mktemp -d)
@@ -154,6 +179,7 @@ jobs:
       if: steps.check-empty-bucket.outputs.GCSBucketNotEmpty == 'true'
       run: |
 
+<<<<<<< HEAD
 
         # Create a temporary directory to store the files to be uploaded
         temp_dir=$(mktemp -d)
@@ -163,6 +189,15 @@ jobs:
 
         # Compare files in the local folder with those in the GCS folder
         for file in "${{ github.workspace }}/lab/dwh/"/*; do
+=======
+        temp_dir=$(mktemp -d)
+
+       
+        gsutil ls "gs://$BUCKET_NAME" > gcs_files.txt
+
+        # Compare files in the local folder with those in the GCS folder
+        for file in "${{ github.workspace }}/lab/dwh"/*; do
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
           base_file=$(basename "$file")
           if ! grep -q "$base_file" gcs_files.txt; then
             cp "$file" "$temp_dir"
@@ -175,7 +210,11 @@ jobs:
 
         # Clean up the temporary directory
         rm -r "$temp_dir"
+<<<<<<< HEAD
       shell: bash
+=======
+      
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
 
     - name: Copy Unique Files to GCS
       if: steps.check-empty-bucket.outputs.GCSBucketNotEmpty == 'true'
@@ -204,8 +243,16 @@ jobs:
         rsync -a "${{ github.workspace }}/lab/dwh/" filtered_files/
 
         # Use gsutil to deploy the filtered files to the GCS bucket
+<<<<<<< HEAD
         gsutil -m cp -r filtered_files/* gs://github-action-gcs/
+=======
+        gsutil -m cp -r filtered_files/* gs://github-action-gcs2001/
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
 
         # Clean up the temporary directory
         rm -r filtered_files
        
+<<<<<<< HEAD
+=======
+
+>>>>>>> 921508b50a5488feed317aab6136c3c4fceffa3b
