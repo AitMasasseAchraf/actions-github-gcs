@@ -139,8 +139,8 @@ jobs:
       id: list_local_files
       run: |
         cd "${{github.workspace}}"
-        ls -R lab/dwh
-        echo "::set-output name=local_files::$(ls -R lab/dwh/)"
+        local_files=($(ls -R lab/dwh))
+        echo "::set-output name=local_files::${local_files[@]}"
 
     - name: List GCS bucket files
       id: list_bucket_files
