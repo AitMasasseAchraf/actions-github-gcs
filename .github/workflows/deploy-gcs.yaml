@@ -139,13 +139,13 @@ jobs:
       id: list_local_files
       run: |
         cd "${{github.workspace}}"
-        local_files=($(find lab/dwh -type f))
+        local_files=($(find lab/dwh_data/marts -type f))
         echo "::set-output name=local_files::${local_files[@]}"
 
     - name: List GCS bucket files
       id: list_bucket_files
       run: |
-        bucket_files=($(gsutil ls gs://github-actions-gcs2001))
+        bucket_files=($(gsutil ls gs://github-actions-gcs2001/labs/marts))
         echo "::set-output name=bucket_files::${bucket_files[@]}"
 
     - name: Compare and copy new files to GCS
@@ -164,7 +164,7 @@ jobs:
             fi
           done
           if [ "$exists" == "false" ]; then
-            gsutil cp "$local_file" gs://github-actions-gcs2001
+            gsutil cp "$local_file" gs://github-actions-gcs2001/labs/marts
           fi
         done
 
